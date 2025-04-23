@@ -48,9 +48,9 @@
         </div>
 
         <div class="mt-4 text-center">
-            <a href="" class="btn btn-primary">Manage Passengers</a>
+            <a href="ManagePassenger" class="btn btn-primary">Manage Passengers</a>
             <a href="ManageStaff" class="btn btn-secondary">Manage Staff</a>
-            <a href="manageBookings" class="btn btn-success">Manage Bookings</a>
+            <a href="ManageBooking" class="btn btn-success">Manage Bookings</a>
             <a href="ManageCruise" class="btn btn-info">Manage Cruise</a>
         </div>
     </div>

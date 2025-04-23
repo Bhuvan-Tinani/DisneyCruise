@@ -80,6 +80,38 @@
         <servlet-name>CreatePayment</servlet-name>
         <servlet-class>com.project.cruise.controller.passenger.CreatePayment</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CruiseInfo</servlet-name>
+        <servlet-class>com.project.cruise.controller.android.CruiseInfo</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>PassengerVerfication</servlet-name>
+        <servlet-class>com.project.cruise.controller.android.PassengerVerfication</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CheckInPassenger</servlet-name>
+        <servlet-class>com.project.cruise.controller.android.CheckInPassenger</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CheckOutPassenger</servlet-name>
+        <servlet-class>com.project.cruise.controller.android.CheckOutPassenger</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewAssignedStaff</servlet-name>
+        <servlet-class>com.project.cruise.controller.admin.ViewAssignedStaff</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ManagePassenger</servlet-name>
+        <servlet-class>com.project.cruise.controller.admin.ManagePassenger</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ManageBooking</servlet-name>
+        <servlet-class>com.project.cruise.controller.admin.ManageBooking</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>PassengerBookingInfo</servlet-name>
+        <servlet-class>com.project.cruise.controller.android.PassengerBookingInfo</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/Login</url-pattern>
@@ -143,6 +175,38 @@
     <servlet-mapping>
         <servlet-name>CreatePayment</servlet-name>
         <url-pattern>/CreatePayment</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CruiseInfo</servlet-name>
+        <url-pattern>/android/CruiseInfo</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PassengerVerfication</servlet-name>
+        <url-pattern>/android/PassengerVerfication</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CheckInPassenger</servlet-name>
+        <url-pattern>/android/CheckInPassenger</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CheckOutPassenger</servlet-name>
+        <url-pattern>/android/CheckOutPassenger</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewAssignedStaff</servlet-name>
+        <url-pattern>/ViewAssignedStaff</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ManagePassenger</servlet-name>
+        <url-pattern>/ManagePassenger</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ManageBooking</servlet-name>
+        <url-pattern>/ManageBooking</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PassengerBookingInfo</servlet-name>
+        <url-pattern>/android/PassengerBookingInfo</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

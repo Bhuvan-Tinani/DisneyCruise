@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="java.util.ArrayList, java.util.Map, com.project.cruise.model.data.StaffWithAssignment, com.project.cruise.model.data.Staff"%>
+<%@page import="java.util.ArrayList, java.util.Map, java.util.List, com.project.cruise.model.data.Staff"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,32 +57,32 @@
             </thead>
             <tbody>
                 <%
-                    Map<String, ArrayList<StaffWithAssignment>> staffByRole = 
-                        (Map<String, ArrayList<StaffWithAssignment>>) request.getAttribute("staffByRole");
-
+                    List<Staff> unAssignedStaff = (List<Staff>) request.getAttribute("unAssignedStaff");
                     String[] roles = (String[]) request.getAttribute("roles");
-
+                    
                     // Roles allowing only one selection
                     String[] singleSelectRoles = { "Captain", "First Officer", "Second Officer", "Chief Engineer", "Assistant Engineer" };
 
                     for (String role : roles) {
-                        ArrayList<StaffWithAssignment> availableStaff = staffByRole.get(role);
+                        List<Staff> staffInRole = new ArrayList<>();
+                        for (Staff staff : unAssignedStaff) {
+                            if (staff.getRole().equalsIgnoreCase(role)) {
+                                staffInRole.add(staff);
+                            }
+                        }
                         boolean isSingleSelect = java.util.Arrays.asList(singleSelectRoles).contains(role);
                 %>
                 <tr>
                     <td class="fw-bold"><%= role %></td>
                     <td>
                         <select class="form-select" name="staff_<%= role.replace(" ", "_") %>" <%= isSingleSelect ? "" : "multiple" %>>
-                            <% if (availableStaff != null && !availableStaff.isEmpty()) {
-                                for (StaffWithAssignment swa : availableStaff) {
-                                    Staff staff = swa.getStaff();
-                                    boolean isAssigned = swa.isAssigned();
-                            %>
-                                <option value="<%= staff.getId() %>" <%= isAssigned ? "selected" : "" %>>
-                                    <%= staff.getFirstName() %> <%= staff.getLastName() %>
-                                </option>
-                            <%  }
-                               } else { %>
+                            <% if (!staffInRole.isEmpty()) {
+                                for (Staff staff : staffInRole) { %>
+                                    <option value="<%= staff.getId() %>">
+                                        <%= staff.getFirstName() %> <%= staff.getLastName() %>
+                                    </option>
+                                <% }
+                            } else { %>
                                 <option disabled>No available staff</option>
                             <% } %>
                         </select>

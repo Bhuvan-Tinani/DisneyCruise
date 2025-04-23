@@ -16,6 +16,15 @@ public class Cruise {
     private int durationDays;
     private double price;
     private String status;
+    boolean isAssigned;
+
+    public boolean isIsAssigned() {
+        return isAssigned;
+    }
+
+    public void setIsAssigned(boolean isAssigned) {
+        this.isAssigned = isAssigned;
+    }
 
     // Constructors
     public Cruise() {
