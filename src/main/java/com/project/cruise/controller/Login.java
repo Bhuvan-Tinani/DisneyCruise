@@ -7,6 +7,8 @@ package com.project.cruise.controller;
 import com.project.cruise.model.data.LoginInfo;
 import com.project.cruise.model.repo.AuthenticationRepo;
 import com.project.cruise.model.repo.IAuthenicationRepo;
+import com.project.cruise.model.utils.EmailUtil;
+import com.project.cruise.model.utils.OTPManager;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -97,26 +99,49 @@ public class Login extends HttpServlet {
         IAuthenicationRepo repo = new AuthenticationRepo(con);
 
         try {
+            if (role.equalsIgnoreCase("passenger") && repo.isUserBlocked(info)) {
+                // 🚫 If blocked, show message and return
+                request.setAttribute("errorMessage", "Your account is blocked. Please contact support.");
+                RequestDispatcher rd = request.getRequestDispatcher("jspPages/Login.jsp");
+                rd.forward(request, response);
+                return;
+            }
+
             if (repo.verifyUser(info)) {
                 HttpSession session = request.getSession(true);
+                session.setAttribute("role", role);
                 session.setAttribute("username", username);
                 session.setMaxInactiveInterval(300);
 
-                if (role.equals("passenger")) {
-                    //RequestDispatcher rd = request.getRequestDispatcher("jspPages/passenger/home.jsp");
-                    RequestDispatcher rd = request.getRequestDispatcher("PassengerHome");
+                if (role.equalsIgnoreCase("passenger")) {
+                    // ✅ Generate OTP
+                    String senderEmail = (String) sc.getAttribute("email");
+                    String senderPassword = (String) sc.getAttribute("emailpassword");
+                    String otp = OTPManager.generateOTP();
+
+                    // ✅ Store OTP and timestamp in session
+                    session.setAttribute("otp", otp);
+                    session.setAttribute("otpTime", System.currentTimeMillis());
+
+                    // ✅ Send OTP to email
+                    EmailUtil.sendOTP(username, otp, senderEmail, senderPassword);
+
+                    // ✅ Redirect to OTP input page
+                    request.setAttribute("username", username);
+                    RequestDispatcher rd = request.getRequestDispatcher("jspPages/passenger/OtpPage.jsp");
                     rd.forward(request, response);
-                } else if (role.equals("staff")) {
+                } else if (role.equalsIgnoreCase("staff")) {
                     response.sendRedirect("jspPages/staff/home.jsp");
-                } else if (role.equals("admin")) {
+                } else if (role.equalsIgnoreCase("admin")) {
                     response.sendRedirect("AdminHome");
                 }
             } else {
-                request.setAttribute("errorMessage", "Invalid Credentials");
+                request.setAttribute("errorMessage", "Invalid credentials.");
                 RequestDispatcher rd = request.getRequestDispatcher("jspPages/Login.jsp");
                 rd.forward(request, response);
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             request.setAttribute("errorMessage", "Database error: " + e.getMessage());
             RequestDispatcher rd = request.getRequestDispatcher("jspPages/Login.jsp");
             rd.forward(request, response);

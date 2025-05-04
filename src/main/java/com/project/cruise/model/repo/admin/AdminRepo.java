@@ -211,7 +211,7 @@ public class AdminRepo implements IAdminRepo {
     @Override
     public List<Passenger> getAllPassenger() throws SQLException {
         List<Passenger> passengers = new ArrayList<>();
-        String sql = "SELECT id, first_name, last_name, email, phone, nationality, passport_number, created_at FROM passengers";
+        String sql = "SELECT id, first_name, last_name, email, phone, nationality, passport_number, created_at, block FROM passengers";
         PreparedStatement pstmt = con.prepareStatement(sql);
         ResultSet rs = pstmt.executeQuery();
         while (rs.next()) {
@@ -224,9 +224,9 @@ public class AdminRepo implements IAdminRepo {
             p.setNationality(rs.getString("nationality"));
             p.setPassportNumber(rs.getString("passport_number"));
             p.setCreatedAt(rs.getTimestamp("created_at"));
+            p.setBlock(rs.getInt("block")); // new line
             passengers.add(p);
         }
-
         return passengers;
     }
 
@@ -269,6 +269,51 @@ public class AdminRepo implements IAdminRepo {
         rs.close();
         pstmt.close();
         return bookingDetailsList;
+    }
+
+    @Override
+    public void updateStatus(int passengerId, boolean blockStatus) throws SQLException {
+        String sql = "UPDATE passengers SET block = ? WHERE id = ?";
+        PreparedStatement stmt = con.prepareStatement(sql);
+        stmt.setInt(1, blockStatus ? 1 : 0);
+        stmt.setInt(2, passengerId);
+        stmt.executeUpdate();
+    }
+
+    @Override
+    public int getTotalPassengers() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM passengers";
+        PreparedStatement stmt = con.prepareStatement(sql);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1);
+        }
+
+        return 0;
+    }
+
+    @Override
+    public int getTotalStaff() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM staff";
+        PreparedStatement stmt = con.prepareStatement(sql);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1);
+        }
+
+        return 0;
+    }
+
+    @Override
+    public int getTotalBookings() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM bookings";
+        PreparedStatement stmt = con.prepareStatement(sql);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1);
+        }
+
+        return 0;
     }
 
 }

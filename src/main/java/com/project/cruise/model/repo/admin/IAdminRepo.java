@@ -32,14 +32,26 @@ public interface IAdminRepo {
 //    public ArrayList<StaffWithAssignment> getAllStaffWithAssignmentStatus(int cruiseid) throws SQLException;
 //
 //    boolean assignStaffToCruise(AssignStaffRequest request) throws SQLException;
-    
     boolean isStaffAssigned(int cruiseId) throws SQLException;
-    
+
     List<Staff> getAllUnAssignedStaff() throws SQLException;
-    void assignStaff(List<Integer> passenger,int cruiseId) throws SQLException;
+
+    void assignStaff(List<Integer> passenger, int cruiseId) throws SQLException;
+
     List<Staff> getAssignedStaff(int cruiseId) throws SQLException;
+
     String getCruiseName(int cruiseId) throws SQLException;
+
     List<Passenger> getAllPassenger() throws SQLException;
+
     List<BookingDetails> getAllBokingDetail() throws SQLException;
-    
+
+    public void updateStatus(int passengerId, boolean blockStatus) throws SQLException;
+
+    int getTotalPassengers() throws SQLException;
+
+    int getTotalStaff() throws SQLException;
+
+    int getTotalBookings() throws SQLException;
+
 }

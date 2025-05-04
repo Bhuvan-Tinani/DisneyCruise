@@ -6,6 +6,7 @@ import com.project.cruise.model.data.OrderDetail;
 import com.project.cruise.model.data.TransactionDetails;
 import com.project.cruise.model.data.passenger.SignUpInfo;
 import com.project.cruise.model.passenger.Passenger;
+import com.project.cruise.model.utils.PasswordManager;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -32,10 +33,11 @@ public class PassengerRepo implements IPassengerRepo {
 
     @Override
     public boolean createAccount(SignUpInfo info) throws SQLException {
+        String hashpassword=PasswordManager.hashWithSalt(info.getPassword());
         String sql = "INSERT INTO users (username, password, role) VALUES (?, ?, ?)";
         PreparedStatement pstmt = con.prepareCall(sql);
         pstmt.setString(1, info.getUsername());
-        pstmt.setString(2, info.getPassword()); // Ideally use password hashing
+        pstmt.setString(2, hashpassword); // Ideally use password hashing
         pstmt.setString(3, "passenger");
         int rows = pstmt.executeUpdate();
         if (rows > 0) {
@@ -224,7 +226,7 @@ public class PassengerRepo implements IPassengerRepo {
         try (PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, bookingRef);
             pstmt.setInt(2, cruiseId);
-            pstmt.setDouble(3, (totalPrice/100));
+            pstmt.setDouble(3, (totalPrice / 100));
 
             int affectedRows = pstmt.executeUpdate();
             if (affectedRows > 0) {
@@ -274,10 +276,10 @@ public class PassengerRepo implements IPassengerRepo {
         }
     }
 
-public BookingDetails fetchBookingDetails(int passengerId) throws SQLException {
-    BookingDetails details = new BookingDetails();
+    public BookingDetails fetchBookingDetails(int passengerId) throws SQLException {
+        BookingDetails details = new BookingDetails();
 
-    String sql = """
+        String sql = """
         SELECT 
             b.booking_reference, 
             c.ship_name AS cruise_name, 
@@ -297,25 +299,37 @@ public BookingDetails fetchBookingDetails(int passengerId) throws SQLException {
         WHERE p.id = ?
     """;
 
-    try (PreparedStatement pstmt = con.prepareStatement(sql)) {
-        pstmt.setInt(1, passengerId);
-        try (ResultSet rs = pstmt.executeQuery()) {
-            if (rs.next()) {
-                details.setBookingReference(rs.getString("booking_reference"));
-                details.setCruiseName(rs.getString("cruise_name"));
-                details.setCruiseRoute(rs.getString("cruise_route"));
-                details.setDepartureDate(rs.getString("departure_date"));
-                details.setDurationDays(rs.getInt("duration_days"));
-                details.setCruisePrice(rs.getDouble("cruise_price"));
-                details.setBoardingPassQr(rs.getString("boarding_pass_qr"));
-                details.setPassengerName(rs.getString("first_name") + " " + rs.getString("last_name"));
-                details.setPassengerEmail(rs.getString("passenger_email")); // Set passenger email
+        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setInt(1, passengerId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    details.setBookingReference(rs.getString("booking_reference"));
+                    details.setCruiseName(rs.getString("cruise_name"));
+                    details.setCruiseRoute(rs.getString("cruise_route"));
+                    details.setDepartureDate(rs.getString("departure_date"));
+                    details.setDurationDays(rs.getInt("duration_days"));
+                    details.setCruisePrice(rs.getDouble("cruise_price"));
+                    details.setBoardingPassQr(rs.getString("boarding_pass_qr"));
+                    details.setPassengerName(rs.getString("first_name") + " " + rs.getString("last_name"));
+                    details.setPassengerEmail(rs.getString("passenger_email")); // Set passenger email
+                }
             }
         }
+
+        return details;
     }
 
-    return details;
-}
+    public boolean updatePassenger(Passenger p) throws SQLException {
+        String query = "UPDATE passengers SET first_name=?, last_name=?, phone=?, nationality=?, passport_number=? WHERE email=?";
+        PreparedStatement ps = con.prepareStatement(query);
+        ps.setString(1, p.getFirstName());
+        ps.setString(2, p.getLastName());
+        ps.setString(3, p.getPhone());
+        ps.setString(4, p.getNationality());
+        ps.setString(5, p.getPassportNumber());
+        ps.setString(6, p.getEmail());
 
+        return ps.executeUpdate() > 0;
+    }
 
 }

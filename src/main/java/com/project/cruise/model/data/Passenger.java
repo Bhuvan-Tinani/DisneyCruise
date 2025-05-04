@@ -3,6 +3,7 @@ package com.project.cruise.model.passenger;
 import java.sql.Timestamp;
 
 public class Passenger {
+
     private int id;
     private String firstName;
     private String lastName;
@@ -16,6 +17,7 @@ public class Passenger {
     public int getId() {
         return id;
     }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -23,6 +25,7 @@ public class Passenger {
     public String getFirstName() {
         return firstName;
     }
+
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -30,6 +33,7 @@ public class Passenger {
     public String getLastName() {
         return lastName;
     }
+
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -37,6 +41,7 @@ public class Passenger {
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -44,6 +49,7 @@ public class Passenger {
     public String getPhone() {
         return phone;
     }
+
     public void setPhone(String phone) {
         this.phone = phone;
     }
@@ -51,6 +57,7 @@ public class Passenger {
     public String getNationality() {
         return nationality;
     }
+
     public void setNationality(String nationality) {
         this.nationality = nationality;
     }
@@ -58,6 +65,7 @@ public class Passenger {
     public String getPassportNumber() {
         return passportNumber;
     }
+
     public void setPassportNumber(String passportNumber) {
         this.passportNumber = passportNumber;
     }
@@ -65,7 +73,18 @@ public class Passenger {
     public Timestamp getCreatedAt() {
         return createdAt;
     }
+
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
     }
+    private int block; // 0 = not blocked, 1 = blocked
+
+    public int getBlock() {
+        return block;
+    }
+
+    public void setBlock(int block) {
+        this.block = block;
+    }
+
 }

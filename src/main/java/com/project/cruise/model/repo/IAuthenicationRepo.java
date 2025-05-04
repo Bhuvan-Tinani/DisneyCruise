@@ -13,4 +13,5 @@ import java.sql.SQLException;
  */
 public interface IAuthenicationRepo {
     public boolean verifyUser(LoginInfo info) throws SQLException;
+    public boolean isUserBlocked(LoginInfo info) throws SQLException;
 }

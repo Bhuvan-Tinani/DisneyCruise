@@ -8,13 +8,18 @@
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
         body {
             font-family: Arial, sans-serif;
             background-image: url('images/cruise.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
             padding: 0;
             color: #fff;
@@ -66,23 +71,49 @@
         .btn-secondary:hover {
             background-color: #777;
         }
+
+        #passwordMessage {
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
     </style>
+
+    <!-- ✅ JS Password Strength Checker -->
+    <script>
+        function isStrongPassword(password) {
+            // At least 8 characters, 1 uppercase, 1 lowercase, 1 digit, 1 special char
+            const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            return regex.test(password);
+        }
+
+        function checkPasswordStrength() {
+            const passwordInput = document.getElementById("password");
+            const submitBtn = document.getElementById("submitBtn");
+            const msg = document.getElementById("passwordMessage");
+
+            const password = passwordInput.value;
+
+            if (!isStrongPassword(password)) {
+                submitBtn.disabled = true;
+                msg.innerText = "Password must be at least 8 characters with uppercase, lowercase, digit, and special character.";
+                msg.style.color = "red";
+            } else {
+                submitBtn.disabled = false;
+                msg.innerText = "Strong password ✔";
+                msg.style.color = "lightgreen";
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("password").addEventListener("input", checkPasswordStrength);
+        });
+    </script>
 </head>
 <body>
 
 <div class="container">
     <h2>Create Account</h2>
     <form action="SignUp" method="POST">
-
-<!--         ✅ First Name 
-        <div class="form-group">
-            <input type="text" class="form-control" name="first_name" placeholder="First Name" required>
-        </div>
-
-         ✅ Last Name 
-        <div class="form-group">
-            <input type="text" class="form-control" name="last_name" placeholder="Last Name" required>
-        </div>-->
 
         <!-- ✅ Email -->
         <div class="form-group">
@@ -91,11 +122,12 @@
 
         <!-- ✅ Password -->
         <div class="form-group">
-            <input type="password" class="form-control" name="password" placeholder="Password" required>
+            <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
+            <small id="passwordMessage"></small>
         </div>
 
         <!-- ✅ Submit Button -->
-        <button type="submit" class="btn-custom">Create Account</button>
+        <button type="submit" class="btn-custom" id="submitBtn" disabled>Create Account</button>
     </form>
 
     <!-- ✅ Login Button -->

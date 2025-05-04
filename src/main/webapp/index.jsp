@@ -4,12 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Cruise Management System</title>
+
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Disney Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Macondo&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome (for icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-image: url('images/cruise.jpg'); /* Add an image in the 'images' folder */
+            font-family: 'Macondo', 'Segoe UI Emoji', sans-serif;
+            background-image: url('images/cruise.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -20,25 +28,47 @@
         }
 
         .navbar {
-            background-color: rgba(0, 0, 0, 0.8);
-            padding: 10px 20px;
+            background-color: #000;
         }
 
         .navbar-brand {
-            color: #FFD700;
-            font-size: 24px;
-            font-weight: bold;
+            transition: all 0.4s ease-in-out;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 10px;
+            border-radius: 12px;
         }
 
-        .nav-link {
+        .navbar-brand:hover {
+            transform: scale(1.05);
+            background-color: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 12px #ffcc00, 0 0 20px #ff8c00;
+        }
+
+        .brand-text {
+            font-family: 'Macondo', cursive;
+            font-size: 26px;
             color: #fff;
-            font-size: 16px;
-            margin-left: 15px;
             transition: color 0.3s ease;
         }
 
-        .nav-link:hover {
-            color: #FFD700;
+        .navbar-brand:hover .brand-text {
+            color: #ffcc00;
+            text-shadow: 2px 2px 5px #fff;
+        }
+
+        .navbar-nav .nav-item .nav-link {
+            font-size: 18px;
+            padding: 10px 15px;
+            transition: background-color 0.3s, color 0.3s;
+            color: white;
+        }
+
+        .navbar-nav .nav-item .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffcc00;
+            border-radius: 4px;
         }
 
         .container {
@@ -68,21 +98,34 @@
             text-align: center;
             margin-top: 20px;
             color: #bbb;
+            text-shadow: 1px 1px 3px #000;
+            font-size: 16px;
         }
     </style>
 </head>
 <body>
 
-<!-- ✅ Navbar (Header) -->
-<nav class="navbar navbar-expand-lg">
-    <a class="navbar-brand" href="#">Cruise Management</a>
-    <div class="collapse navbar-collapse">
-        <ul class="navbar-nav ml-auto"> <!-- Align to right -->
+<!-- ✅ Navigation Bar (updated to Disney style, links unchanged) -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="#">
+        <span class="brand-text">CRUISE MANAGEMENT</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto d-flex align-items-center">
             <li class="nav-item">
-                <a href="Login" class="nav-link">Login</a>
+                <a class="nav-link d-flex align-items-center" href="Login">
+                    <i class="fas fa-sign-in-alt mr-1"></i> Login
+                </a>
             </li>
             <li class="nav-item">
-                <a href="cruise-list.jsp" class="nav-link">View Cruises</a>
+                <a class="nav-link d-flex align-items-center" href="ViewCruise">
+                    <i class="fas fa-ship mr-1"></i> View Cruises
+                </a>
             </li>
         </ul>
     </div>
@@ -102,6 +145,17 @@
 <!-- ✅ Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<%
+    String logoutSuccess = request.getParameter("logout");
+    if ("success".equals(logoutSuccess)) {
+%>
+<script>
+    alert('You have been successfully logged out!');
+</script>
+<%
+    }
+%>
+
 
 </body>
 </html>

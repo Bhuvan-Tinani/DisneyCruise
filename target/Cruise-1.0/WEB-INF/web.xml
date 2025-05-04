@@ -8,6 +8,14 @@
         <param-name>driver</param-name>
         <param-value>com.mysql.cj.jdbc.Driver</param-value>
     </context-param>
+    <filter>
+        <filter-name>PasswordStrengthFilter</filter-name>
+        <filter-class>com.project.cruise.filters.PasswordStrengthFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>PasswordStrengthFilter</filter-name>
+        <servlet-name>Login</servlet-name>
+    </filter-mapping>
     <listener>
         <description>ServletContextListener, ServletContextAttributeListener</description>
         <listener-class>com.project.cruise.listeners.ContextListener</listener-class>
@@ -112,6 +120,18 @@
         <servlet-name>PassengerBookingInfo</servlet-name>
         <servlet-class>com.project.cruise.controller.android.PassengerBookingInfo</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ViewProfile</servlet-name>
+        <servlet-class>com.project.cruise.controller.passenger.ViewProfile</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>VerifyOtp</servlet-name>
+        <servlet-class>com.project.cruise.controller.passenger.VerifyOtp</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ToggleBlockStatus</servlet-name>
+        <servlet-class>com.project.cruise.controller.admin.ToggleBlockStatus</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/Login</url-pattern>
@@ -207,6 +227,18 @@
     <servlet-mapping>
         <servlet-name>PassengerBookingInfo</servlet-name>
         <url-pattern>/android/PassengerBookingInfo</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewProfile</servlet-name>
+        <url-pattern>/ViewProfile</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>VerifyOtp</servlet-name>
+        <url-pattern>/VerifyOtp</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ToggleBlockStatus</servlet-name>
+        <url-pattern>/ToggleBlockStatus</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

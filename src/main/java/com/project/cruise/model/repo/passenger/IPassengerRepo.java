@@ -24,4 +24,5 @@ public interface IPassengerRepo {
     public Passenger getPassengerByEmail(String email) throws SQLException;
     public int addTransactions(OrderDetail orderDetail) throws SQLException;
     public boolean updateTransactionWithPaymentId(String paymentId, String orderId) throws SQLException;
+    public boolean updatePassenger(Passenger p) throws SQLException;
 }

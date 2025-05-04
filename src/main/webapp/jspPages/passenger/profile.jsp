@@ -62,22 +62,25 @@
     </c:if>
 
     <form action="PassengerProfile" method="POST">
+        <!-- Hidden Field to Identify Insert/Update -->
+        <input type="hidden" name="action" value="${not empty passenger ? 'update' : 'insert'}" />
+
         <!-- ✅ First Name -->
         <div class="form-group">
             <label>First Name</label>
-            <input type="text" name="first_name" class="form-control" required>
+            <input type="text" name="first_name" class="form-control" value="${passenger != null ? passenger.firstName : ''}" required>
         </div>
 
         <!-- ✅ Last Name -->
         <div class="form-group">
             <label>Last Name</label>
-            <input type="text" name="last_name" class="form-control" required>
+            <input type="text" name="last_name" class="form-control" value="${passenger != null ? passenger.lastName : ''}" required>
         </div>
 
         <!-- ✅ Phone -->
         <div class="form-group">
             <label>Phone</label>
-            <input type="text" name="phone" class="form-control" required>
+            <input type="text" name="phone" class="form-control" value="${passenger != null ? passenger.phone : ''}" required>
         </div>
 
         <!-- ✅ Nationality (Fetched from API) -->
@@ -85,17 +88,20 @@
             <label>Nationality</label>
             <select id="nationality" name="nationality" class="form-control" required>
                 <option value="">Select Nationality</option>
+                <c:forEach items="${countries}" var="country">
+                    <option value="${country}" ${passenger != null && country == passenger.nationality ? 'selected' : ''}>${country}</option>
+                </c:forEach>
             </select>
         </div>
 
         <!-- ✅ Passport Number -->
         <div class="form-group">
             <label>Passport Number</label>
-            <input type="text" name="passport_number" class="form-control" required>
+            <input type="text" name="passport_number" class="form-control" value="${passenger != null ? passenger.passportNumber : ''}" required>
         </div>
 
         <!-- ✅ Submit Button -->
-        <button type="submit" class="btn-custom">Save Profile</button>
+        <button type="submit" class="btn-custom">${passenger != null ? 'Update Profile' : 'Save Profile'}</button>
     </form>
 </div>
 
@@ -104,25 +110,24 @@
 
 <!-- ✅ Fetch Nationality from RestCountries API -->
 <script>
-     $(document).ready(function () {
-    $.ajax({
-        url: 'https://restcountries.com/v3.1/all',
-        method: 'GET',
-        success: function(data) {
-            console.log(data[0].name.common);
-            data.forEach(country => {
-                if (country.name && country.name.common) {
-                    $('#nationality').append(
-                        "<option value="+country.name.common+">"+country.name.common+"</option>"
-                    );
-                }
-            });
-        },
-        error: function(error) {
-            console.error("Error fetching countries:", error);
-        }
+    $(document).ready(function () {
+        $.ajax({
+            url: 'https://restcountries.com/v3.1/all',
+            method: 'GET',
+            success: function(data) {
+                data.forEach(country => {
+                    if (country.name && country.name.common) {
+                        $('#nationality').append(
+                            "<option value="+country.name.common+">"+country.name.common+"</option>"
+                        );
+                    }
+                });
+            },
+            error: function(error) {
+                console.error("Error fetching countries:", error);
+            }
+        });
     });
-});
 </script>
 
 </body>

@@ -63,13 +63,7 @@ public class Logout extends HttpServlet {
         }
 
         // Send an alert message before redirecting
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
-        out.println("<script type='text/javascript'>");
-        out.println("alert('You have been successfully logged out!');");
-        out.println("window.location.href='/Cruise';"); // Redirect after the alert
-        out.println("</script>");
-        //response.sendRedirect("/Cruise");
+       response.sendRedirect("/Cruise/index.jsp?logout=success");
     }
 
     /**
@@ -83,7 +77,14 @@ public class Logout extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        // Invalidate the session if it exists
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
+        // Redirect to login page
+        response.sendRedirect("Login");
     }
 
     /**
@@ -95,5 +96,4 @@ public class Logout extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }

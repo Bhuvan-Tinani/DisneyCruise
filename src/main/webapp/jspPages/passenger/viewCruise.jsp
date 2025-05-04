@@ -1,120 +1,159 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.project.cruise.model.data.Cruise" %>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Available Cruises</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<%@ include file="../header.jsp" %>
 
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Cruises</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Macondo&display=swap" rel="stylesheet">
 
     <style>
         body {
-            background-color: #f8f9fa;
-            padding: 30px;
+            font-family: 'Macondo', cursive;
+            background: linear-gradient(135deg, #e0f7fa, #ffffff);
+            padding-top: 80px;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
         }
 
         .cruise-card {
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
+            border-radius: 18px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .cruise-header {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #007bff;
+        .cruise-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.1);
         }
 
-        .cruise-detail {
-            font-size: 1rem;
-            margin-bottom: 8px;
+        .cruise-image {
+            height: 200px;
+            object-fit: cover;
         }
 
         .status-badge {
             padding: 6px 12px;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            font-weight: bold;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
         }
 
         .status-scheduled {
-            background-color: #ffc107;
-            color: #212529;
+            background-color: #d0f8ce;
+            color: #256029;
         }
 
         .status-ongoing {
-            background-color: #28a745;
-            color: white;
+            background-color: #fff3cd;
+            color: #856404;
         }
 
         .btn-book {
-            margin-top: 15px;
-            background-color: #007bff;
+            background: linear-gradient(to right, #36d1dc, #5b86e5);
             color: white;
-            font-weight: 500;
-            border-radius: 8px;
-            display: inline-block;
-            text-align: center;
-            padding: 10px 20px;
-            text-decoration: none;
+            font-weight: bold;
+            border-radius: 50px;
+            padding: 10px 24px;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            border: none;
         }
 
         .btn-book:hover {
-            background-color: #0056b3;
-            color: white;
+            background: linear-gradient(to right, #5b86e5, #36d1dc);
+            transform: scale(1.05);
+            color: #fff;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: bold;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+            border-radius: 20px;
+            display: inline-block;
+            color: #003366;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .cruise-image {
+                height: 160px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .page-title {
+                font-size: 22px;
+                padding: 10px 18px;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2 class="text-center mb-5">🌊 Available Cruises</h2>
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="page-title">🌴 Available Cruises 🚢</h2>
+        </div>
 
-    <div class="row">
-        <%
-            List<Cruise> cruiseList = (List<Cruise>) request.getAttribute("cruiseList");
-            if (cruiseList != null && !cruiseList.isEmpty()) {
-                for (Cruise cruise : cruiseList) {
-                    String statusClass = "status-scheduled";
-                    if ("Ongoing".equalsIgnoreCase(cruise.getStatus())) {
-                        statusClass = "status-ongoing";
-                    }
-        %>
-        <div class="col-md-6">
-            <div class="card cruise-card">
-                <div class="card-body">
-                    <h4 class="cruise-header"><%= cruise.getShipName() %></h4>
-                    <p class="cruise-detail"><strong>Route:</strong> <%= cruise.getRoute() %></p>
-                    <p class="cruise-detail"><strong>Departure:</strong> <%= cruise.getDepartureDate() %></p>
-                    <p class="cruise-detail"><strong>Duration:</strong> <%= cruise.getDurationDays() %> days</p>
-                    <p class="cruise-detail"><strong>Price:</strong> $<%= cruise.getPrice() %></p>
-                    <span class="status-badge <%= statusClass %>">
-                        <%= cruise.getStatus() %>
-                    </span>
-
-                    <!-- Book Now Link with query parameter -->
-                    <a href="BookCruise?cruiseId=<%= cruise.getId() %>" class="btn-book d-block mt-3 text-center">🚢 Book Now</a>
-
+        <div class="row">
+            <%
+                List<Cruise> cruiseList = (List<Cruise>) request.getAttribute("cruiseList");
+                if (cruiseList != null && !cruiseList.isEmpty()) {
+                    for (Cruise cruise : cruiseList) {
+                        String statusClass = "status-scheduled";
+                        if ("Ongoing".equalsIgnoreCase(cruise.getStatus())) {
+                            statusClass = "status-ongoing";
+                        }
+                        String cruiseImageUrl = "images/cruise.jpg";
+            %>
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card cruise-card shadow-sm h-100">
+                    <img src="<%= cruiseImageUrl%>" class="card-img-top cruise-image" alt="Cruise Image">
+                    <div class="card-body text-center d-flex flex-column justify-content-between">
+                        <div>
+                            <h4 class="mb-3"><%= cruise.getShipName()%></h4>
+                            <p><strong>Route:</strong> <%= cruise.getRoute()%></p>
+                            <p><strong>Departure:</strong> <%= cruise.getDepartureDate()%></p>
+                            <p><strong>Duration:</strong> <%= cruise.getDurationDays()%> days</p>
+                            <p><strong>Price:</strong> $<%= cruise.getPrice()%></p>
+                            <span class="status-badge <%= statusClass %> mt-2 mb-3 d-inline-block">
+                                <%= cruise.getStatus()%>
+                            </span>
+                        </div>
+                        <a href="BookCruise?cruiseId=<%= cruise.getId()%>" class="btn btn-book mt-auto">🚢 Book Now</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <%
+            <%
+                    }
+                } else {
+            %>
+            <div class="col-12 text-center">
+                <h5>No cruises available right now.</h5>
+            </div>
+            <%
                 }
-            } else {
-        %>
-        <div class="col-12 text-center">
-            <h5>No cruises available right now.</h5>
+            %>
         </div>
-        <%
-            }
-        %>
     </div>
-</div>
 
 </body>
 </html>

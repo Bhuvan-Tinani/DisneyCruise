@@ -4,9 +4,14 @@
  */
 package com.project.cruise.controller.admin;
 
+import com.project.cruise.model.repo.admin.AdminRepo;
+import com.project.cruise.model.repo.admin.IAdminRepo;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +40,7 @@ public class AdminHome extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet AdminHome</title>");            
+            out.println("<title>Servlet AdminHome</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet AdminHome at " + request.getContextPath() + "</h1>");
@@ -56,9 +61,22 @@ public class AdminHome extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       // processRequest(request, response);
-        RequestDispatcher rd=request.getRequestDispatcher("jspPages/admin/home.jsp");
-        rd.forward(request, response);
+        // processRequest(request, response);
+        try {
+            ServletConfig cnf = getServletConfig();
+            ServletContext sc = cnf.getServletContext();
+            Connection conn = (Connection) sc.getAttribute("connection");
+            IAdminRepo repo = new AdminRepo(conn);
+            int passengers = repo.getTotalPassengers();
+            int staff = repo.getTotalStaff();
+            int booking = repo.getTotalBookings();
+            request.setAttribute("totalPassenger", passengers);
+            request.setAttribute("totalStaff", staff);
+            request.setAttribute("totalBooking", booking);
+            RequestDispatcher rd = request.getRequestDispatcher("jspPages/admin/home.jsp");
+            rd.forward(request, response);
+        } catch (Exception e) {
+        }
     }
 
     /**
